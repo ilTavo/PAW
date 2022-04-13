@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
+from rest_framework import authentication, permissions
 from rest_framework import status, generics, mixins
 
 
@@ -58,7 +59,11 @@ def article_details(request, pk):
 '''
 
 class ProdottoList(APIView):
-    def get(self,request):
+    ## DA VERIFICARE PERCHè IL PASSAGGIO DEL TOKEN NELL'HEADER NON PASSA ##
+   ## authentication_classes = [authentication.TokenAuthentication]
+   ## permission_classes = [permissions.IsAuthenticated]
+
+    def get(self,request, format=None):
         prodottos = Prodotto.objects.all()
         serializer = ProdottoSerializer(prodottos, many=True)
         return Response(serializer.data)

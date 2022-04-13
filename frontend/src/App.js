@@ -1,40 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import TabPanel from './components/tab';
+import Main from './components/ordinazioniMenu';
 import Login from './components/Login';
-import DataFetching from './components/DataFetching';
-import DataFetchingStyle from './components/DataFetchingStyle';
-import "./components/GlobalVar";
+import DataFetching from './components/DataFetchingStyle';
+import Drawer from './components/Menu';
+import Carrello from './components/Carrello';
+import Product from './components/Product';
 
 
-function App() {
- 
-if (localStorage.getItem('token')=="") {
-  return (
-    <div className="App">
-      <header className="App-header">        
-        
-      <Login></Login>  
-      </header>    
-      
-    </div>
-  );
-  
-} else {
-  return (
-    <div className="App">
-      <header className="App-header">   
-      
-      { localStorage.getItem('token') }
 
-      </header>    
+export default function App() {
+ const [cartItems, setCartItems] = useState([]);
+ const onAdd =(product) =>{
+  const exist = cartItems.find(x=>x.id === product.id);
+  if(exist){
+     setCartItems(cartItems.map(x=>x.id === product.id ? {...exist, qty: exist.qty +1}:x
+      )
+    )
+   } else {
+    setCartItems([...cartItems, {...product, qty:1 }]);
+   }
+  };
+  if (localStorage.getItem('token')=="") {
+    return (
+      <div className="App">
+        <header className="App-header">              
+        </header>    
+        <Login></Login>
+      </div>
+    );
+    
+  } else {
+    return (
+      <div className="App">
+        <header className="App-header">   
+        <Drawer></Drawer>     
+        <Main onAdd={onAdd} ></Main>
+        <Carrello cartItems={cartItems} onAdd={onAdd}></Carrello>
+        </header>    
       
-    </div>
-  );
-  
+      </div>
+    );
+  }
 }
-  
-
-} 
-
-export default App;

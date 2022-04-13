@@ -5,25 +5,29 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import React, {useState, useEffect} from 'react';
-import '../App.css';
-import axios from 'axios'
+import axios  from 'axios'
+
 
 function DataFetching() {
   const[posts, setPosts] = useState([])
   useEffect(() => {
-      axios.get('http://127.0.0.1:8000/prodotti/')
+      //localStorage.getItem('token')
+      //Qui va passato il TOKEN nell'header ma non funziona, da abilitare con l'autorizzazione in Ordinazioni/views
+       axios.get('http://127.0.0.1:8000/prodotti/')
       .then(res => {
-          setPosts(res.data)
+          setPosts(res.data)          
       })
       .catch(err =>{
-          console.log(err)
+         // console.log(token)
       })
-  })
-    const [id, setAge] = React.useState('');  
+  },[])
+    const [id, setAge] = React.useState(''); 
+    const [carrello, addProd] = React.useState({}); 
     const handleChange = (event) => {
       setAge(event.target.value);
+      
     };
-    console.log(id)
+    
   return (
      
     <Box sx={{ minWidth: 120 }}>
@@ -43,8 +47,10 @@ function DataFetching() {
       }
       </Select>
     </FormControl>
+   
     </Box>
   );
+  
 }
 
 export default DataFetching;
